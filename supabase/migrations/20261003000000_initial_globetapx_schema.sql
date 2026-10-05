@@ -189,39 +189,402 @@ CREATE TABLE IF NOT EXISTS "zLogCambios" (
 );
 
 -- Claves y restricciones.
-ALTER TABLE ONLY "AgendaUsuario" ADD CONSTRAINT "AgendaUsuario_pkey" PRIMARY KEY ("ID");
-ALTER TABLE ONLY "Categoria" ADD CONSTRAINT "Categoria_pkey" PRIMARY KEY ("ID");
-ALTER TABLE ONLY "ContenidoPorCategoria" ADD CONSTRAINT "ContenidoPorCategoria_pkey" PRIMARY KEY ("ID");
-ALTER TABLE ONLY "DocumentacionPais" ADD CONSTRAINT "DocumentacionPais_pkey" PRIMARY KEY ("IDPais");
-ALTER TABLE ONLY "Estadisticas" ADD CONSTRAINT "Estadisticas_pkey" PRIMARY KEY ("ID");
-ALTER TABLE ONLY "Evento" ADD CONSTRAINT "EventoPais_pkey" PRIMARY KEY ("ID");
-ALTER TABLE ONLY "EventoFavorito" ADD CONSTRAINT "EventoFavorito_pkey" PRIMARY KEY ("ID");
-ALTER TABLE ONLY "NumerosEmergenciaa" ADD CONSTRAINT "countryemergencycontacts_pkey" PRIMARY KEY ("id");
-ALTER TABLE ONLY "Pais" ADD CONSTRAINT "Pais_pkey" PRIMARY KEY ("ID");
-ALTER TABLE ONLY "PaisInfo" ADD CONSTRAINT "PaisInfo_pkey" PRIMARY KEY ("ID");
-ALTER TABLE ONLY "PreferenciaUsuario" ADD CONSTRAINT "PreferenciaUsuario_pkey" PRIMARY KEY ("ID");
-ALTER TABLE ONLY "RegistroEstadisticas" ADD CONSTRAINT "RegistroEstadisticas_pkey" PRIMARY KEY ("ID");
-ALTER TABLE ONLY "Ubicacion" ADD CONSTRAINT "Ubicacion_pkey" PRIMARY KEY ("ID");
-ALTER TABLE ONLY "Usuario" ADD CONSTRAINT "Usuario_pkey" PRIMARY KEY ("ID");
-ALTER TABLE ONLY "zLogCambios" ADD CONSTRAINT "LogCambios_pkey" PRIMARY KEY ("ID");
-ALTER TABLE ONLY "PaisInfo" ADD CONSTRAINT "PaisInfo_IDPais_key" UNIQUE ("IDPais");
-ALTER TABLE ONLY "Usuario" ADD CONSTRAINT "Usuario_mail_key" UNIQUE ("mail");
-ALTER TABLE ONLY "AgendaUsuario" ADD CONSTRAINT "AgendaUsuario_IDEvento_fkey" FOREIGN KEY ("IDEvento") REFERENCES "Evento"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE ONLY "AgendaUsuario" ADD CONSTRAINT "AgendaUsuario_IDUsuario_fkey" FOREIGN KEY ("IDUsuario") REFERENCES "Usuario"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE ONLY "ContenidoPorCategoria" ADD CONSTRAINT "ContenidoPorCategoria_IDCategoria_fkey" FOREIGN KEY ("IDCategoria") REFERENCES "Categoria"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE ONLY "ContenidoPorCategoria" ADD CONSTRAINT "ContenidoPorCategoria_IDPais_fkey" FOREIGN KEY ("IDPais") REFERENCES "Pais"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE ONLY "ContenidoPorCategoria" ADD CONSTRAINT "ContenidoPorCategoria_creadoPor_fkey" FOREIGN KEY ("creadoPor") REFERENCES "Usuario"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE ONLY "Estadisticas" ADD CONSTRAINT "Estadisticas_IDUsuario_fkey" FOREIGN KEY ("IDUsuario") REFERENCES "Usuario"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE ONLY "Evento" ADD CONSTRAINT "EventoPais_IDCategoria_fkey" FOREIGN KEY ("IDCategoria") REFERENCES "Categoria"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE ONLY "Evento" ADD CONSTRAINT "EventoPais_IDPais_fkey" FOREIGN KEY ("IDPais") REFERENCES "Pais"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE ONLY "EventoFavorito" ADD CONSTRAINT "EventoFavorito_IDEvento_fkey" FOREIGN KEY ("IDEvento") REFERENCES "Evento"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE ONLY "EventoFavorito" ADD CONSTRAINT "EventoFavorito_IDUsuario_fkey" FOREIGN KEY ("IDUsuario") REFERENCES "Usuario"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE ONLY "PaisInfo" ADD CONSTRAINT "PaisInfo_IDPais_fkey" FOREIGN KEY ("IDPais") REFERENCES "Pais"("ID") ON UPDATE NO ACTION ON DELETE CASCADE;
-ALTER TABLE ONLY "PreferenciaUsuario" ADD CONSTRAINT "PreferenciaUsuario_IDCategoria_fkey" FOREIGN KEY ("IDCategoria") REFERENCES "Categoria"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE ONLY "PreferenciaUsuario" ADD CONSTRAINT "PreferenciaUsuario_IDUsuario_fkey" FOREIGN KEY ("IDUsuario") REFERENCES "Usuario"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE ONLY "Ubicacion" ADD CONSTRAINT "Ubicacion_IDUsuario_fkey" FOREIGN KEY ("IDUsuario") REFERENCES "Usuario"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE ONLY "Usuario" ADD CONSTRAINT "Usuario_paisActual_fkey" FOREIGN KEY ("paisActual") REFERENCES "Pais"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE ONLY "zLogCambios" ADD CONSTRAINT "LogCambios_IDUsuario_fkey" FOREIGN KEY ("IDUsuario") REFERENCES "Usuario"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'AgendaUsuario'))
+      AND contype = 'p'
+  ) THEN
+    ALTER TABLE ONLY "AgendaUsuario" ADD CONSTRAINT "AgendaUsuario_pkey" PRIMARY KEY ("ID");
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'Categoria'))
+      AND contype = 'p'
+  ) THEN
+    ALTER TABLE ONLY "Categoria" ADD CONSTRAINT "Categoria_pkey" PRIMARY KEY ("ID");
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'ContenidoPorCategoria'))
+      AND contype = 'p'
+  ) THEN
+    ALTER TABLE ONLY "ContenidoPorCategoria" ADD CONSTRAINT "ContenidoPorCategoria_pkey" PRIMARY KEY ("ID");
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'DocumentacionPais'))
+      AND contype = 'p'
+  ) THEN
+    ALTER TABLE ONLY "DocumentacionPais" ADD CONSTRAINT "DocumentacionPais_pkey" PRIMARY KEY ("IDPais");
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'Estadisticas'))
+      AND contype = 'p'
+  ) THEN
+    ALTER TABLE ONLY "Estadisticas" ADD CONSTRAINT "Estadisticas_pkey" PRIMARY KEY ("ID");
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'Evento'))
+      AND contype = 'p'
+  ) THEN
+    ALTER TABLE ONLY "Evento" ADD CONSTRAINT "EventoPais_pkey" PRIMARY KEY ("ID");
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'EventoFavorito'))
+      AND contype = 'p'
+  ) THEN
+    ALTER TABLE ONLY "EventoFavorito" ADD CONSTRAINT "EventoFavorito_pkey" PRIMARY KEY ("ID");
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'NumerosEmergenciaa'))
+      AND contype = 'p'
+  ) THEN
+    ALTER TABLE ONLY "NumerosEmergenciaa" ADD CONSTRAINT "countryemergencycontacts_pkey" PRIMARY KEY ("id");
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'Pais'))
+      AND contype = 'p'
+  ) THEN
+    ALTER TABLE ONLY "Pais" ADD CONSTRAINT "Pais_pkey" PRIMARY KEY ("ID");
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'PaisInfo'))
+      AND contype = 'p'
+  ) THEN
+    ALTER TABLE ONLY "PaisInfo" ADD CONSTRAINT "PaisInfo_pkey" PRIMARY KEY ("ID");
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'PreferenciaUsuario'))
+      AND contype = 'p'
+  ) THEN
+    ALTER TABLE ONLY "PreferenciaUsuario" ADD CONSTRAINT "PreferenciaUsuario_pkey" PRIMARY KEY ("ID");
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'RegistroEstadisticas'))
+      AND contype = 'p'
+  ) THEN
+    ALTER TABLE ONLY "RegistroEstadisticas" ADD CONSTRAINT "RegistroEstadisticas_pkey" PRIMARY KEY ("ID");
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'Ubicacion'))
+      AND contype = 'p'
+  ) THEN
+    ALTER TABLE ONLY "Ubicacion" ADD CONSTRAINT "Ubicacion_pkey" PRIMARY KEY ("ID");
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'Usuario'))
+      AND contype = 'p'
+  ) THEN
+    ALTER TABLE ONLY "Usuario" ADD CONSTRAINT "Usuario_pkey" PRIMARY KEY ("ID");
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'zLogCambios'))
+      AND contype = 'p'
+  ) THEN
+    ALTER TABLE ONLY "zLogCambios" ADD CONSTRAINT "LogCambios_pkey" PRIMARY KEY ("ID");
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'PaisInfo'))
+      AND conname = 'PaisInfo_IDPais_key' AND contype = 'u'
+  ) THEN
+    ALTER TABLE ONLY "PaisInfo" ADD CONSTRAINT "PaisInfo_IDPais_key" UNIQUE ("IDPais");
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'Usuario'))
+      AND conname = 'Usuario_mail_key' AND contype = 'u'
+  ) THEN
+    ALTER TABLE ONLY "Usuario" ADD CONSTRAINT "Usuario_mail_key" UNIQUE ("mail");
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'AgendaUsuario'))
+      AND conname = 'AgendaUsuario_IDEvento_fkey' AND contype = 'f'
+  ) THEN
+    ALTER TABLE ONLY "AgendaUsuario" ADD CONSTRAINT "AgendaUsuario_IDEvento_fkey" FOREIGN KEY ("IDEvento") REFERENCES "Evento"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'AgendaUsuario'))
+      AND conname = 'AgendaUsuario_IDUsuario_fkey' AND contype = 'f'
+  ) THEN
+    ALTER TABLE ONLY "AgendaUsuario" ADD CONSTRAINT "AgendaUsuario_IDUsuario_fkey" FOREIGN KEY ("IDUsuario") REFERENCES "Usuario"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'ContenidoPorCategoria'))
+      AND conname = 'ContenidoPorCategoria_IDCategoria_fkey' AND contype = 'f'
+  ) THEN
+    ALTER TABLE ONLY "ContenidoPorCategoria" ADD CONSTRAINT "ContenidoPorCategoria_IDCategoria_fkey" FOREIGN KEY ("IDCategoria") REFERENCES "Categoria"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'ContenidoPorCategoria'))
+      AND conname = 'ContenidoPorCategoria_IDPais_fkey' AND contype = 'f'
+  ) THEN
+    ALTER TABLE ONLY "ContenidoPorCategoria" ADD CONSTRAINT "ContenidoPorCategoria_IDPais_fkey" FOREIGN KEY ("IDPais") REFERENCES "Pais"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'ContenidoPorCategoria'))
+      AND conname = 'ContenidoPorCategoria_creadoPor_fkey' AND contype = 'f'
+  ) THEN
+    ALTER TABLE ONLY "ContenidoPorCategoria" ADD CONSTRAINT "ContenidoPorCategoria_creadoPor_fkey" FOREIGN KEY ("creadoPor") REFERENCES "Usuario"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'Estadisticas'))
+      AND conname = 'Estadisticas_IDUsuario_fkey' AND contype = 'f'
+  ) THEN
+    ALTER TABLE ONLY "Estadisticas" ADD CONSTRAINT "Estadisticas_IDUsuario_fkey" FOREIGN KEY ("IDUsuario") REFERENCES "Usuario"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'Evento'))
+      AND conname = 'EventoPais_IDCategoria_fkey' AND contype = 'f'
+  ) THEN
+    ALTER TABLE ONLY "Evento" ADD CONSTRAINT "EventoPais_IDCategoria_fkey" FOREIGN KEY ("IDCategoria") REFERENCES "Categoria"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'Evento'))
+      AND conname = 'EventoPais_IDPais_fkey' AND contype = 'f'
+  ) THEN
+    ALTER TABLE ONLY "Evento" ADD CONSTRAINT "EventoPais_IDPais_fkey" FOREIGN KEY ("IDPais") REFERENCES "Pais"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'EventoFavorito'))
+      AND conname = 'EventoFavorito_IDEvento_fkey' AND contype = 'f'
+  ) THEN
+    ALTER TABLE ONLY "EventoFavorito" ADD CONSTRAINT "EventoFavorito_IDEvento_fkey" FOREIGN KEY ("IDEvento") REFERENCES "Evento"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'EventoFavorito'))
+      AND conname = 'EventoFavorito_IDUsuario_fkey' AND contype = 'f'
+  ) THEN
+    ALTER TABLE ONLY "EventoFavorito" ADD CONSTRAINT "EventoFavorito_IDUsuario_fkey" FOREIGN KEY ("IDUsuario") REFERENCES "Usuario"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'PaisInfo'))
+      AND conname = 'PaisInfo_IDPais_fkey' AND contype = 'f'
+  ) THEN
+    ALTER TABLE ONLY "PaisInfo" ADD CONSTRAINT "PaisInfo_IDPais_fkey" FOREIGN KEY ("IDPais") REFERENCES "Pais"("ID") ON UPDATE NO ACTION ON DELETE CASCADE;
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'PreferenciaUsuario'))
+      AND conname = 'PreferenciaUsuario_IDCategoria_fkey' AND contype = 'f'
+  ) THEN
+    ALTER TABLE ONLY "PreferenciaUsuario" ADD CONSTRAINT "PreferenciaUsuario_IDCategoria_fkey" FOREIGN KEY ("IDCategoria") REFERENCES "Categoria"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'PreferenciaUsuario'))
+      AND conname = 'PreferenciaUsuario_IDUsuario_fkey' AND contype = 'f'
+  ) THEN
+    ALTER TABLE ONLY "PreferenciaUsuario" ADD CONSTRAINT "PreferenciaUsuario_IDUsuario_fkey" FOREIGN KEY ("IDUsuario") REFERENCES "Usuario"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'Ubicacion'))
+      AND conname = 'Ubicacion_IDUsuario_fkey' AND contype = 'f'
+  ) THEN
+    ALTER TABLE ONLY "Ubicacion" ADD CONSTRAINT "Ubicacion_IDUsuario_fkey" FOREIGN KEY ("IDUsuario") REFERENCES "Usuario"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'Usuario'))
+      AND conname = 'Usuario_paisActual_fkey' AND contype = 'f'
+  ) THEN
+    ALTER TABLE ONLY "Usuario" ADD CONSTRAINT "Usuario_paisActual_fkey" FOREIGN KEY ("paisActual") REFERENCES "Pais"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
+  END IF;
+END;
+$migration$;
+DO $migration$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = to_regclass(format('%I.%I', current_schema(), 'zLogCambios'))
+      AND conname = 'LogCambios_IDUsuario_fkey' AND contype = 'f'
+  ) THEN
+    ALTER TABLE ONLY "zLogCambios" ADD CONSTRAINT "LogCambios_IDUsuario_fkey" FOREIGN KEY ("IDUsuario") REFERENCES "Usuario"("ID") ON UPDATE NO ACTION ON DELETE NO ACTION;
+  END IF;
+END;
+$migration$;
 
 -- Índices secundarios.
 CREATE UNIQUE INDEX IF NOT EXISTS "PaisDocumentacion_codigo_uq" ON public."PaisDocumentacion" USING btree (codigo);
