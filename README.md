@@ -33,6 +33,8 @@ La migración de normalización aborta antes de borrar las tablas antiguas si en
 
 ## Instalación vacía
 
+Disparo inicial de migraciones Supabase
+
 En un proyecto Supabase vacío, las migraciones se aplican en orden: primero la línea base y después la normalización. Este repositorio no carga datos iniciales ni datos de usuarios automáticamente.
 
 No guardes contraseñas, tokens de Supabase ni volcados con información de usuarios en GitHub.
