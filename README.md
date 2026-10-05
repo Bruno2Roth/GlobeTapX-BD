@@ -11,7 +11,7 @@ Este repositorio versiona el esquema PostgreSQL de GlobeTapX para Supabase.
 
 ## Conectar este repositorio a Supabase
 
-En Supabase, conecta el proyecto con GitHub y selecciona `Bruno2Roth/GlobeTapX-BD) y la rama `main`. Activa **Deploy to production** para que Supabase aplique las nuevas migraciones cuando lleguen a esa rama. La creación automática de ramas de preview es opcional. Supabase procesa los archivos de `supabase/migrations`; editar sólo `bd.sql` no ejecuta cambios en la base.
+En Supabase, conecta el proyecto con GitHub y selecciona `Bruno2Roth/GlobeTapX-BD` y la rama `main`. Activa **Deploy to production** para que Supabase aplique las nuevas migraciones cuando lleguen a esa rama. La creación automática de ramas de preview es opcional. Supabase procesa los archivos de `supabase/migrations`; editar sólo `bd.sql` no ejecuta cambios en la base.
 
 ### Si el proyecto Supabase ya tiene datos
 
