@@ -2,7 +2,7 @@
 
 Este repositorio versiona el esquema PostgreSQL y las migraciones de Supabase de GlobeTapX.
 
-## Archivos y migraciones
+## Archivos y migracioness
 
 - `bd.sql`: snapshot del esquema para consultar el DDL. La integración de GitHub de Supabase no ejecuta este archivo; los cambios aplicables deben estar en `supabase/migrations/`.
 - `supabase/migrations/20261003000000_initial_globetapx_schema.sql`: línea base con las tablas y restricciones iniciales.
